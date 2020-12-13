@@ -9,6 +9,7 @@ with open(path.join(local_dir, "README.rst"), encoding="utf-8") as f:
   long_description = f.read()
 
 requires = [
+  "aiohttp",
   "iso8601",
   "requests",
   "future",

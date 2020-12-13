@@ -374,10 +374,17 @@ class FaunaClientAsync(FaunaClient):
         client_timeout = ClientTimeout(total=self.timeout)
         return ClientSession(connector=conn, headers=headers, timeout=client_timeout)
 
+    async def close_session(self):
+        if self.counter.decrement() == 0:
+            await self.session.close()
+
+    def __del__(self):
+        pass
+
     async def __aenter__(self):
         return self
 
-    async def __aexit__(self, *excinfo):
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
         if self.counter.decrement() == 0:
             await self.session.close()
 
